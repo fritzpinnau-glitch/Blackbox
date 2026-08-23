@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOCKBOX — Der physische Ad-Blocker für dein Netzwerk</title>
+<meta name="description" content="BlockBox ist der physische Ad-Blocker für dein Netzwerk. Einstecken, verbinden, Werbung reduzieren – ohne monatliches Abo.">
+<style>
+:root{
+  --bg:#f5f5f3;--surface:#fff;--text:#101010;--muted:#6d6d6d;--line:#deded9;
+  --black:#080808;--green:#b8ff4d;--max:1180px;--radius:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font:inherit;border:0;cursor:pointer}
+.container{width:min(var(--max),calc(100% - 40px));margin:auto}
+
+/* Dynamischer, transparenter "True Glass" Header mit automatischem Farbwechsel */
+nav{
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(var(--max), calc(100% - 40px));
+  background:rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px) saturate(250%);
+  -webkit-backdrop-filter: blur(14px) saturate(250%);
+  z-index:999;
+  border-radius:999px;
+  padding:0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+/* Wenn der Header über eine dunkle Sektion scrollt, schaltet er automatisch auf hellen Text um */
+nav.dark-mode {
+  background: rgba(18, 18, 18, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+nav.dark-mode .nav-links a { color: #ccc; }
+nav.dark-mode .nav-links a:hover { color: #fff; }
+nav.dark-mode .nav-cta { background: #fff; color: #000; }
+
+.logo{font-weight:900;letter-spacing:-.07em;font-size:22px}
+.nav-links{display:flex;gap:28px;color:#333;font-size:14px;transition: color 0.3s ease}
+.nav-links a:hover{color:#000}
+.nav-cta{background:#000;color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease}
+.nav-cta:hover{transform: scale(1.03)}
+
+/* Moderne Scroll-Animations-Klassen (Reveal on Scroll) */
+.reveal{
+  opacity:0;
+  transform:translateY(50px);
+  transition:opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change:opacity, transform;
+}
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.hero{padding:180px 0 90px;min-height:800px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.13em;margin-bottom:22px}
+h1{font-size:clamp(48px,6vw,84px);line-height:.93;letter-spacing:-.075em;max-width:700px}
+.hero p{font-size:19px;color:var(--muted);max-width:540px;margin:28px 0}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:16px 23px;border-radius:999px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;justify-content:center}
+.btn-primary{background:#000;color:#fff}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-secondary{border:1px solid #bbb;background:transparent}
+
+.product-stage{
+  height:480px;
+  border-radius:36px;
+  background-image: url('131f1fec-067f-4b2b-8cd4-8caf7da46ac8.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+  position:relative;
+  overflow:hidden;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-stage:hover{transform: scale(1.02)}
+
+.section{padding:120px 0}
+.section-dark{background:#080808;color:#fff}
+.section-head{max-width:700px;margin-bottom:55px}
+.kicker{font-size:13px;text-transform:uppercase;letter-spacing:.14em;font-weight:800;color:#777;margin-bottom:15px}
+.section-dark .kicker{color:#aaa}
+h2{font-size:clamp(36px,4.5vw,60px);line-height:.98;letter-spacing:-.06em}
+.lead{font-size:19px;color:var(--muted);margin-top:20px;max-width:680px}
+.section-dark .lead{color:#aaa}
+
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px;min-height:245px;transition:transform 0.4s ease, border-color 0.4s ease}
+.card:hover{transform:translateY(-8px);border-color:#000}
+.section-dark .card{background:#121212;border-color:#292929}
+.section-dark .card:hover{border-color:#fff}
+.icon{font-size:32px;margin-bottom:40px}
+.card h3{font-size:24px;letter-spacing:-.035em;margin-bottom:10px}
+.card p{color:var(--muted)}
+.section-dark .card p{color:#999}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.compare-card{border-radius:var(--radius);padding:38px;min-height:380px;display:flex;flex-direction:column;justify-content:space-between}
+.before{background:#e8e8e3}.after{background:#0b0b0b;color:#fff}
+.browser{height:180px;border-radius:17px;background:#fff;padding:17px;color:#111;box-shadow:0 10px 30px #0001;overflow:hidden}
+.browser-bar{height:9px;width:90px;background:#ddd;border-radius:10px;margin-bottom:20px}
+.ads{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ad{height:55px;border-radius:8px;background:#ddd;position:relative}
+.ad:after{content:"ADVERTISEMENT";font-size:7px;color:#888;position:absolute;left:8px;top:7px}
+.clean{height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:25px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step{border-top:1px solid #333;padding-top:20px}
+.num{font-size:12px;color:#777;margin-bottom:40px}
+.step h3{font-size:28px;letter-spacing:-.04em;margin-bottom:10px}
+.step p{color:#999}
+
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.product-large{
+  height:440px;
+  border-radius:34px;
+  background-image: url('Gemini_Generated_Image_ghyu75ghyu75ghyu.jfif');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 30px 70px #0003;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-large:hover{transform: scale(1.02)}
+.specs{list-style:none;margin-top:28px;border-top:1px solid var(--line)}
+.specs li{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line);gap:20px}
+.specs span:last-child{font-weight:700;text-align:right}
+
+.gallery-section{padding:100px 0;background:#121212;color:#fff}
+.gallery-img{
+  height:480px;
+  border-radius:30px;
+  background-image: url('NoteGPT_Image_20260823190945.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  margin-top:40px;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gallery-img:hover{transform: scale(1.015)}
+
+.waitlist-box{background:#dfffad;border-radius:32px;padding:50px;color:#111}
+.waitlist-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.waitlist-box h2{font-size:44px;letter-spacing:-.05em;margin-bottom:10px}
+.waitlist-box p{color:#3a4a28;margin-bottom:20px}
+.form-group{display:flex;gap:10px;flex-wrap:wrap}
+.form-input{flex:1;min-width:220px;padding:16px 20px;border-radius:999px;border:1px solid #b2db85;background:#fff;font-size:15px;outline:none}
+.form-input:focus{border-color:#000}
+.privacy-hint{font-size:12px;color:#4e603b;margin-top:10px}
+
+.faq{max-width:800px}
+.faq-item{border-top:1px solid var(--line);padding:22px 0}
+.faq-q{display:flex;justify-content:space-between;font-weight:800;cursor:pointer}
+.faq-a{display:none;color:var(--muted);padding:14px 30px 0 0}
+.faq-item.open .faq-a{display:block}
+
+footer{background:#080808;color:#fff;padding:60px 0 40px}
+.footer-row{display:flex;justify-content:space-between;gap:30px;align-items:flex-start;margin-bottom:40px;border-bottom:1px solid #222;padding-bottom:40px}
+.footer-links{display:flex;gap:20px;font-size:13px;color:#888}
+.footer-links a:hover{color:#fff}
+footer p{color:#888;font-size:13px}
+
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:#fff;color:#111;padding:40px;border-radius:24px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:20px;right:20px;font-size:20px;cursor:pointer;background:none;border:0;font-weight:bold}
+.modal-content h3{margin-bottom:15px;font-size:22px}
+.modal-content p, .modal-content address{font-style:normal;font-size:14px;color:#555;line-height:1.6;margin-bottom:15px}
+
+@media(max-width:850px){
+  .nav-links{display:none}
+  nav{top:10px; width:calc(100% - 20px)}
+  .hero{grid-template-columns:1fr;padding-top:140px}.product-stage{height:320px}
+  .features,.steps,.compare,.spec-grid,.waitlist-grid{grid-template-columns:1fr}
+  .section{padding:75px 0}.waitlist-box{padding:30px}
+  .waitlist-box h2{font-size:32px}.footer-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav id="navbar">
+    <a class="logo" href="#">BLOCKBOX</a>
+    <div class="nav-links">
+      <a href="#how">So funktioniert's</a>
+      <a href="#features">Features</a>
+      <a href="#gallery">Galerie</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="nav-cta" href="#buy">Vorbestellen</a>
+  </nav>
+</header>
+
+<main>
+<section class="container hero">
+  <div class="reveal">
+    <div class="eyebrow">The physical ad blocker</div>
+    <h1>Und? Warum siehst du noch Werbung?</h1>
+    <p>BlockBox sitzt unauffällig an deinem Router und filtert Werbung sowie Tracker auf Netzwerkebene – vollautomatisch für alle Geräte im Haus.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#buy">20% Rabatt sichern →</a>
+      <a class="btn btn-secondary" href="#how">So funktioniert's</a>
+    </div>
+  </div>
+  <div class="product-stage reveal" aria-label="BlockBox Produktbild neben Router" style="transition-delay: 0.2s;"></div>
+</section>
+
+<section class="section section-dark" id="features">
+<div class="container">
+  <div class="section-head reveal">
+    <div class="kicker">One box. Your network.</div>
+    <h2>Einstecken. Verbinden. Weniger Werbung.</h2>
+    <p class="lead">Keine umständlichen Apps, die du auf jedem Smartphone oder Fernseher einzeln installieren musst. BlockBox schützt das gesamte WLAN zentral.</p>
+  </div>
+  <div class="features">
+    <article class="card reveal"><div class="icon">↯</div><h3>Plug in</h3><p>Einfach per Kabel mit deinem vorhandenen Router verbinden und sofort einsatzbereit.</p></article>
+    <article class="card reveal" style="transition-delay: 0.15s;"><div class="icon">⊘</div><h3>No more ads</h3><p>Werbung und bekannte Tracker werden direkt im Netzwerk herausgefiltert, bevor sie laden.</p></article>
+    <article class="card reveal" style="transition-delay: 0.3s;"><div class="icon">∞</div><h3>No subscription</h3><p>Einmal kaufen statt monatlich für teure Software-Abos zu bezahlen.</p></article>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+  <div class="section-head reveal">
+    <div class="kicker">See the difference</div>
+    <h2>Vorher. Nachher.</h2>
+  </div>
+  <div class="compare">
+    <div class="compare-card before reveal">
+      <div><div class="kicker">Without BlockBox</div><h3>Mehr Werbung. Mehr Ablenkung.</h3></div>
+      <div class="browser"><div class="browser-bar"></div><div class="ads"><div class="ad"></div><div class="ad"></div><div class="ad"></div><div class="ad"></div></div></div>
+    </div>
+    <div class="compare-card after reveal" style="transition-delay: 0.2s;">
+      <div><div class="kicker">With BlockBox</div><h3>Clean. Einfacher. Ruhiger.</h3></div>
+      <div class="browser"><div class="browser-bar"></div><div class="clean">CONTENT</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section section-dark" id="how">
+<div class="container">
+  <div class="section-head reveal">
+    <div class="kicker">How it works</div>
+    <h2>Ein kleines Gerät. Für dein ganzes Netzwerk.</h2>
+  </div>
+  <div class="steps">
+    <div class="step reveal"><div class="num">01</div><h3>Plug in.</h3><p>Verbinde BlockBox mit einem freien LAN-Port deines Routers.</p></div>
+    <div class="step reveal" style="transition-delay: 0.15s;"><div class="num">02</div><h3>Block.</h3><p>Das System filtert im Hintergrund vollautomatisch bekanntermaßen unerwünschte Werbe- und Tracking-Domains.</p></div>
+    <div class="step reveal" style="transition-delay: 0.3s;"><div class="num">03</div><h3>Enjoy.</h3><p>Laptop, Smartphone, Smart-TV und Tablet profitieren direkt von weniger Ablenkung.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<div class="container spec-grid">
+  <div class="product-large reveal"></div>
+  <div class="reveal" style="transition-delay: 0.2s;">
+    <div class="kicker">Meet BlockBox</div>
+    <h2>Designed to disappear.</h2>
+    <p class="lead">Schlicht, elegant matt-schwarz und kompakt gebaut, um unauffällig direkt neben deinem Router zu stehen.</p>
+    <ul class="specs">
+      <li><span>Design</span><span>Minimal · Mattschwarz</span></li>
+      <li><span>Setup</span><span>True Plug & Play</span></li>
+      <li><span>Abdeckung</span><span>Netzwerkweit (Multi-Device)</span></li>
+      <li><span>Modell</span><span>Einmaliger Kauf</span></li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<section class="gallery-section" id="gallery">
+<div class="container">
+  <div class="section-head reveal" style="margin-bottom:0;">
+    <div class="kicker" style="color:#aaa;">Living Room Integration</div>
+    <h2>Fügt sich nahtlos in dein Zuhause ein.</h2>
+    <p class="lead" style="color:#999;">Kein Kabelsalat, kein störendes Blinken – BlockBox arbeitet leise und zuverlässig im Hintergrund.</p>
+  </div>
+  <div class="gallery-img reveal" style="transition-delay: 0.2s;"></div>
+</div>
+</section>
+
+<section class="section" id="buy">
+<div class="container">
+  <div class="waitlist-box reveal">
+    <div class="waitlist-grid">
+      <div>
+        <div class="kicker" style="color:#4e603b">Limited Launch Edition</div>
+        <h2>Sichere dir 20% Rabatt.</h2>
+        <p>Wir bereiten die erste Produktionsserie vor. Trag dich unverbindlich in die Warteliste ein und erhalte zum Start deinen exklusiven Preisnachlass.</p>
+      </div>
+      <div>
+        <form onsubmit="event.preventDefault(); alert('Vielen Dank! Du stehst jetzt auf der Warteliste für BlockBox und erhältst bald Post.');">
+          <div class="form-group">
+            <input type="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
+            <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
+          </div>
+          <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="faq">
+<div class="container">
+  <div class="section-head reveal"><div class="kicker">FAQ</div><h2>Häufige Fragen</h2></div>
+  <div class="faq">
+    <div class="faq-item reveal"><div class="faq-q">Funktioniert BlockBox auf allen Geräten im WLAN? <span>+</span></div><div class="faq-a">Ja, da BlockBox direkt auf Netzwerkebene arbeitet, schützt es alle Geräte (Smart-TVs, Handys, PCs), die mit deinem Router verbunden sind.</div></div>
+    <div class="faq-item reveal"><div class="faq-q">Muss ich technische Vorkenntnisse haben? <span>+</span></div><div class="faq-a">Nein. Das Gerät ist so konzipiert, dass kein manuelles Flashen oder Programmieren notwendig ist. Auspacken, anstecken, fertig.</div></div>
+    <div class="faq-item reveal"><div class="faq-q">Gibt es monatliche Folgekosten? <span>+</span></div><div class="faq-a">Nein, es handelt sich um ein reines Hardware-Produkt ohne erzwungene Abo-Gebühren.</div></div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="container">
+  <div class="footer-row">
+    <div>
+      <div class="logo">BLOCKBOX</div>
+      <p style="margin-top:8px">Und? Warum siehst du noch Werbung?</p>
+    </div>
+    <div class="footer-links">
+      <a href="#" onclick="openModal('impressumModal')">Impressum</a>
+      <a href="#" onclick="openModal('datenschutzModal')">Datenschutz</a>
+    </div>
+  </div>
+  <p>© 2026 BLOCKBOX · Alle Rechte vorbehalten.</p>
+</div>
+</footer>
+
+<div class="modal" id="impressumModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('impressumModal')">×</button>
+    <h3>Impressum</h3>
+    <p><strong>Angaben gemäß § 5 DDG / TMG:</strong></p>
+    <address>
+      Max Mustermann<br>
+      Musterstraße 123<br>
+      12345 Musterstadt<br>
+      Deutschland
+    </address>
+    <p><strong>Kontakt:</strong><br>E-Mail: hello@blockbox.example</p>
+    <p><em>Hinweis: Dies ist eine Prototyp-Landingpage zur Marktvalidierung.</em></p>
+  </div>
+</div>
+
+<div class="modal" id="datenschutzModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('datenschutzModal')">×</button>
+    <h3>Datenschutzerklärung</h3>
+    <p><strong>1. Datenschutz auf einen Blick</strong><br>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website besuchst oder dich in unsere Warteliste einträgst.</p>
+    <p><strong>2. Datenerfassung auf dieser Website</strong><br>Die von dir im Wartelisten-Formular eingegebene E-Mail-Adresse wird ausschließlich zum Zweck der Benachrichtigung über den offiziellen Produktlaunch der BlockBox gespeichert und verarbeitet.</p>
+  </div>
+</div>
+
+<script>
+// Scroll-Animation Observer
+const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.entries ? entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      observer.unobserve(entry.target);
+    }
+  }) : entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.reveal').forEach(el => { observer.observe(el); });
+
+// Automatischer Farbwechsel des Glass-Headers je nach Hintergrund (Dunkel/Hell)
+const navbar = document.getElementById('navbar');
+const darkSections = document.querySelectorAll('.section-dark, .gallery-section');
+
+window.addEventListener('scroll', () => {
+  let scrollPos = window.scrollY + 100;
+  let isDark = false;
+
+  darkSections.forEach(sec => {
+    let top = sec.offsetTop;
+    let height = sec.offsetHeight;
+    if (scrollPos >= top && scrollPos < top + height) {
+      isDark = true;
+    }
+  });
+
+  if (isDark) {
+    navbar.classList.add('dark-mode');
+  } else {
+    navbar.classList.remove('dark-mode');
+  }
+});
+
+// FAQ Toggle
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
+});
+
+// Modal Funktionen
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal')) { event.target.classList.remove('active'); }
+}
+</script>
+</body>
+</html>
