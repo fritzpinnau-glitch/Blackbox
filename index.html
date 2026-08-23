@@ -297,13 +297,29 @@ footer p{color:#888;font-size:13px}
 </div>
 </section>
 
-<form action="https://formspree.io/f/xjybdaqo" method="POST">
-  <div class="form-group">
-    <input type="email" name="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
-    <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
+<section class="section" id="buy">
+<div class="container">
+  <div class="waitlist-box reveal">
+    <div class="waitlist-grid">
+      <div>
+        <div class="kicker" style="color:#4e603b">Limited Launch Edition</div>
+        <h2>Sichere dir 20% Rabatt.</h2>
+        <p>Wir bereiten die erste Produktionsserie vor. Trag dich unverbindlich in die Warteliste ein und erhalte zum Start deinen exklusiven Preisnachlass.</p>
+      </div>
+      <div>
+        <!-- Formspree Integration -->
+        <form action="https://formspree.io/f/xjybdaqo" method="POST">
+          <div class="form-group">
+            <input type="email" name="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
+            <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
+          </div>
+          <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
+        </form>
+      </div>
+    </div>
   </div>
-  <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
-</form>
+</div>
+</section>
 
 <section class="section" id="faq">
 <div class="container">
@@ -362,12 +378,7 @@ footer p{color:#888;font-size:13px}
 // Scroll-Animation Observer
 const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
 const observer = new IntersectionObserver((entries, observer) => {
-  entries.entries ? entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      observer.unobserve(entry.target);
-    }
-  }) : entries.forEach(entry => {
+  entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('active');
       observer.unobserve(entry.target);
