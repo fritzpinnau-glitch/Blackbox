@@ -297,28 +297,13 @@ footer p{color:#888;font-size:13px}
 </div>
 </section>
 
-<section class="section" id="buy">
-<div class="container">
-  <div class="waitlist-box reveal">
-    <div class="waitlist-grid">
-      <div>
-        <div class="kicker" style="color:#4e603b">Limited Launch Edition</div>
-        <h2>Sichere dir 20% Rabatt.</h2>
-        <p>Wir bereiten die erste Produktionsserie vor. Trag dich unverbindlich in die Warteliste ein und erhalte zum Start deinen exklusiven Preisnachlass.</p>
-      </div>
-      <div>
-        <form onsubmit="event.preventDefault(); alert('Vielen Dank! Du stehst jetzt auf der Warteliste für BlockBox und erhältst bald Post.');">
-          <div class="form-group">
-            <input type="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
-            <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
-          </div>
-          <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
-        </form>
-      </div>
-    </div>
+<form action="https://formspree.io/f/xjybdaqo" method="POST">
+  <div class="form-group">
+    <input type="email" name="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
+    <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
   </div>
-</div>
-</section>
+  <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
+</form>
 
 <section class="section" id="faq">
 <div class="container">
