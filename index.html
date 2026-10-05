@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Atelier | Sculptural Furniture & Objects</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Aura Atelier | Sculptural Furniture</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for High-End Serif & Clean Sans -->
+    
+    <!-- Google Fonts: Cinzel for elegant serifs, Jost for clean sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -22,9 +25,10 @@
                         sans: ['Jost', 'sans-serif'],
                     },
                     colors: {
-                        luxuryDark: '#1a1a1a',
-                        luxuryGray: '#f4f4f4',
-                        luxuryBorder: '#e5e5e5',
+                        luxuryDark: '#121212',
+                        luxuryLight: '#FAFAFA', 
+                        luxuryBorder: '#E5E5E5',
+                        stoneBg: '#F5F5F4', // Tailwind stone-100 equivalent
                     }
                 }
             }
@@ -34,164 +38,157 @@
     <style>
         body {
             font-family: 'Jost', sans-serif;
-            background-color: #ffffff;
-            color: #1a1a1a;
+            background-color: #FAFAFA;
+            color: #121212;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
-        h1, h2, h3, .font-serif {
+        h1, h2, h3, h4, .font-serif {
             font-family: 'Cinzel', serif;
             letter-spacing: 0.12em;
         }
-        .transition-all-custom {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        .transition-custom {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .image-container {
+            mix-blend-mode: multiply;
         }
     </style>
 </head>
 <body class="antialiased selection:bg-luxuryDark selection:text-white">
 
     <!-- Top Announcement Bar -->
-    <div class="bg-[#111] text-white text-[11px] tracking-[0.2em] py-2 text-center font-sans font-light">
-        COMPLIMENTARY GLOBAL SHIPPING ON ORDERS OVER $2,000
+    <div class="bg-luxuryDark text-white text-[10px] sm:text-[11px] tracking-[0.2em] py-2.5 text-center font-sans font-light uppercase">
+        Complimentary global shipping on orders over $2,000
     </div>
 
-    <!-- Main Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-luxuryBorder">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-50 bg-luxuryLight/90 backdrop-blur-md border-b border-luxuryBorder transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between">
             
-            <!-- Mobile Menu & Left Nav -->
-            <div class="flex items-center space-x-6 lg:w-1/3">
+            <!-- Mobile Menu Toggle & Left Nav -->
+            <div class="flex items-center space-x-8 lg:w-1/3">
                 <button id="mobile-menu-btn" class="lg:hidden text-luxuryDark text-xl focus:outline-none">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <nav class="hidden lg:flex items-center space-x-8 text-xs tracking-[0.15em] font-medium text-luxuryDark">
-                    <a href="#collections" class="hover:opacity-60 transition-opacity">COLLECTIONS</a>
-                    <a href="#about" class="hover:opacity-60 transition-opacity">ABOUT</a>
-                    <a href="#journal" class="hover:opacity-60 transition-opacity">JOURNAL</a>
+                <nav class="hidden lg:flex items-center space-x-10 text-[11px] tracking-[0.2em] uppercase font-medium text-luxuryDark">
+                    <a href="#collections" class="hover:text-neutral-500 transition-colors">Collections</a>
+                    <a href="#about" class="hover:text-neutral-500 transition-colors">About</a>
+                    <a href="#journal" class="hover:text-neutral-500 transition-colors">Journal</a>
                 </nav>
             </div>
 
             <!-- Centered Brand Logo -->
             <div class="text-center lg:w-1/3">
-                <a href="#" class="inline-block">
-                    <h1 class="text-xl lg:text-2xl font-serif font-semibold tracking-[0.25em] text-luxuryDark">AURA</h1>
-                    <span class="text-[9px] tracking-[0.4em] text-neutral-500 font-sans block -mt-1">ATELIER</span>
+                <a href="#" class="inline-block flex flex-col items-center">
+                    <h1 class="text-2xl lg:text-3xl font-serif font-semibold tracking-[0.25em] text-luxuryDark leading-none">AURA</h1>
+                    <span class="text-[10px] tracking-[0.4em] text-neutral-500 font-sans mt-1">ATELIER</span>
                 </a>
             </div>
 
-            <!-- Right Icons -->
-            <div class="flex items-center justify-end space-x-6 lg:w-1/3 text-sm text-luxuryDark">
-                <button aria-label="Search" class="hover:opacity-60 transition-opacity hidden sm:block">
+            <!-- Right Nav Icons -->
+            <div class="flex items-center justify-end space-x-8 lg:w-1/3 text-sm text-luxuryDark">
+                <button aria-label="Search" class="hover:text-neutral-500 transition-colors hidden sm:block">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-                <button aria-label="Account" class="hover:opacity-60 transition-opacity hidden sm:block" onclick="openModal('Account Portal')">
+                <button aria-label="Account" class="hover:text-neutral-500 transition-colors hidden sm:block" onclick="openModal('Account')">
                     <i class="fa-regular fa-user"></i>
                 </button>
-                <button aria-label="Cart" class="hover:opacity-60 transition-opacity relative" onclick="openModal('Shopping Bag (0 items)')">
-                    <i class="fa-solid fa-bag-shopping text-base"></i>
-                    <span class="absolute -top-1 -right-2 bg-luxuryDark text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-sans">0</span>
+                <button aria-label="Cart" class="hover:text-neutral-500 transition-colors relative" onclick="openModal('Shopping Bag')">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="absolute -top-1.5 -right-2.5 bg-luxuryDark text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-sans">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Drawer Navigation -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-luxuryBorder px-6 py-6 space-y-4 shadow-xl">
-            <a href="#collections" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">COLLECTIONS</a>
-            <a href="#about" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">ABOUT</a>
-            <a href="#journal" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">JOURNAL</a>
-            <div class="flex space-x-6 pt-4 text-sm text-luxuryDark">
-                <button class="flex items-center space-x-2" onclick="openModal('Search')"><i class="fa-solid fa-magnifying-glass"></i> <span>Search</span></button>
-                <button class="flex items-center space-x-2" onclick="openModal('Account Portal')"><i class="fa-regular fa-user"></i> <span>Account</span></button>
-            </div>
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-luxuryLight border-b border-luxuryBorder px-6 py-8 space-y-6 shadow-2xl absolute w-full">
+            <a href="#collections" class="block text-xs tracking-[0.2em] uppercase font-medium py-2 border-b border-gray-200">Collections</a>
+            <a href="#about" class="block text-xs tracking-[0.2em] uppercase font-medium py-2 border-b border-gray-200">About</a>
+            <a href="#journal" class="block text-xs tracking-[0.2em] uppercase font-medium py-2 border-b border-gray-200">Journal</a>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="relative bg-[#f4f4f4] py-16 lg:py-24 px-6 overflow-hidden">
-        <div class="max-w-6xl mx-auto text-center">
-            <div class="space-y-4 mb-12">
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif text-luxuryDark tracking-wider">
-                    LUMINA COLLECTION: SCULPTURAL HARMONY
-                </h2>
-                <div class="pt-2">
-                    <a href="#collections" class="inline-block border border-luxuryDark text-luxuryDark px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom shadow-sm">
-                        SHOP THE CONSOLE
-                    </a>
-                </div>
-            </div>
+    <section class="py-12 md:py-20 px-4 sm:px-8 max-w-[1600px] mx-auto">
+        <div class="text-center mb-10 md:mb-16">
+            <h2 class="text-3xl md:text-5xl font-serif text-luxuryDark tracking-[0.15em] mb-6">
+                LUMINA COLLECTION:<br>
+                <span class="text-2xl md:text-4xl text-neutral-600 mt-4 block">SCULPTURAL HARMONY</span>
+            </h2>
+            <a href="#collections" class="inline-block mt-4 border border-luxuryDark text-luxuryDark px-10 py-4 text-[11px] tracking-[0.25em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-custom">
+                Shop The Collection
+            </a>
+        </div>
 
-            <!-- Hero Image Container (Console Table) -->
-            <div class="relative max-w-5xl mx-auto bg-white/40 p-6 sm:p-12 rounded-sm shadow-sm flex items-center justify-center">
-                <img src="lumina-console-table.jfif" alt="Lumina Long Console Table with Walnut Top and Smoke Glass Bases" class="w-full h-auto object-contain max-h-[500px] drop-shadow-xl" onerror="this.src='https://placehold.co/1000x500/f4f4f4/333333?text=Lumina+Console+Table'">
-            </div>
+        <!-- Very Large Presentation Box for the Console -->
+        <div class="w-full bg-stoneBg flex items-center justify-center p-8 md:p-24 overflow-hidden shadow-inner image-container">
+            <img src="lumina-console.jfif" 
+                 alt="Lumina Long Console Table" 
+                 class="w-full h-auto object-contain max-h-[700px] hover:scale-105 transition-custom duration-1000 drop-shadow-2xl"
+                 onerror="this.src='https://placehold.co/1400x700/e7e5e4/333333?text=Lumina+Console+(Image+Missing)'">
         </div>
     </section>
 
-    <!-- Featured Designs Section -->
-    <section id="collections" class="py-20 lg:py-28 px-6 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <h3 class="text-2xl lg:text-3xl font-serif tracking-widest text-luxuryDark mb-3">FEATURED DESIGNS</h3>
-            <div class="w-12 h-[1px] bg-luxuryDark mx-auto opacity-40"></div>
+    <!-- Featured Designs Section (Asymmetrical Layout) -->
+    <section id="collections" class="py-16 md:py-24 px-4 sm:px-8 max-w-[1400px] mx-auto">
+        <div class="text-center mb-16 md:mb-24">
+            <h3 class="text-2xl md:text-3xl font-serif tracking-[0.2em] text-luxuryDark mb-4">FEATURED DESIGNS</h3>
+            <div class="w-16 h-[1px] bg-luxuryDark mx-auto opacity-30"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 items-start">
+        <!-- Layout Grid: 2 Columns on Desktop -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
             
-            <!-- Product 1: Lumina Long Console -->
-            <div class="group text-center flex flex-col items-center">
-                <div class="bg-[#f9f9f9] w-full p-8 lg:p-12 flex items-center justify-center mb-6 rounded-sm min-h-[380px] transition-all-custom group-hover:bg-[#f2f2f2]">
-                    <img src="lumina-console-table.jfif" alt="Lumina Console" class="w-full h-auto max-h-[280px] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/800x500/f4f4f4/333333?text=Lumina+Console'">
+            <!-- Product 1: Lumina Long Console (Full Width Spanning) -->
+            <div class="md:col-span-2 group flex flex-col items-center mb-12">
+                <div class="w-full bg-stoneBg p-12 md:p-24 flex items-center justify-center mb-8 overflow-hidden image-container relative">
+                    <!-- Subtle overlay badge -->
+                    <div class="absolute top-6 left-6 text-[10px] tracking-[0.2em] uppercase text-neutral-500 font-medium">Signature Piece</div>
+                    <img src="lumina-console.jfif" 
+                         alt="Lumina Console" 
+                         class="w-full h-auto max-h-[500px] object-contain drop-shadow-xl group-hover:scale-[1.02] transition-custom duration-700"
+                         onerror="this.src='https://placehold.co/1200x500/e7e5e4/333333?text=Lumina+Console'">
                 </div>
-                <h4 class="font-serif text-sm lg:text-base tracking-widest mb-2">LUMINA LONG CONSOLE TABLE</h4>
-                <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$2,900</p>
-                <button onclick="addToBag('Lumina Long Console Table', '$2,900')" class="border border-luxuryDark text-luxuryDark px-7 py-3 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
-                    DISCOVER
-                </button>
-            </div>
-
-            <!-- Product 2: Lumina Side Table -->
-            <div class="group text-center flex flex-col items-center">
-                <div class="bg-[#f9f9f9] w-full p-8 lg:p-12 flex items-center justify-center mb-6 rounded-sm min-h-[380px] transition-all-custom group-hover:bg-[#f2f2f2]">
-                    <img src="lumina-side-table.jfif" alt="Lumina Side Table" class="w-full h-auto max-h-[280px] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x500/f4f4f4/333333?text=Lumina+Side+Table'">
+                <div class="text-center flex flex-col items-center">
+                    <h4 class="font-serif text-lg md:text-xl tracking-[0.15em] mb-3">LUMINA LONG CONSOLE TABLE</h4>
+                    <p class="font-sans text-sm tracking-wider text-neutral-600 mb-8">$2,900</p>
+                    <button onclick="addToBag('Lumina Long Console Table', '$2,900')" class="border-b border-luxuryDark text-luxuryDark pb-1 text-xs tracking-[0.2em] uppercase font-medium hover:text-neutral-500 hover:border-neutral-500 transition-colors">
+                        Discover
+                    </button>
                 </div>
-                <h4 class="font-serif text-sm lg:text-base tracking-widest mb-2">LUMINA MODULAR SIDE TABLE</h4>
-                <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$950</p>
-                <button onclick="addToBag('Lumina Modular Side Table', '$950')" class="border border-luxuryDark text-luxuryDark px-7 py-3 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
-                    DISCOVER
-                </button>
             </div>
 
-            <!-- Product 3: Lumina Desk -->
-            <div class="group text-center flex flex-col items-center">
-                <div class="bg-[#f9f9f9] w-full p-8 lg:p-12 flex items-center justify-center mb-6 rounded-sm min-h-[380px] transition-all-custom group-hover:bg-[#f2f2f2]">
-                    <img src="lumina-desk.jfif" alt="Lumina Desk" class="w-full h-auto max-h-[280px] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/800x500/f4f4f4/333333?text=Lumina+Desk'">
+            <!-- Product 2: Lumina Side Table (Left Column) -->
+            <div class="col-span-1 group flex flex-col items-center">
+                <div class="w-full bg-stoneBg p-10 md:p-16 flex items-center justify-center mb-8 overflow-hidden h-[400px] md:h-[500px] image-container">
+                    <img src="lumina-bedside-table.jfif" 
+                         alt="Lumina Side Table" 
+                         class="w-full h-full object-contain drop-shadow-xl group-hover:scale-[1.03] transition-custom duration-700"
+                         onerror="this.src='https://placehold.co/600x600/e7e5e4/333333?text=Lumina+Side+Table'">
                 </div>
-                <h4 class="font-serif text-sm lg:text-base tracking-widest mb-2">LUMINA DESK</h4>
-                <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$1,450</p>
-                <button onclick="addToBag('Lumina Desk', '$1,450')" class="border border-luxuryDark text-luxuryDark px-7 py-3 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
-                    DISCOVER
-                </button>
+                <div class="text-center flex flex-col items-center">
+                    <h4 class="font-serif text-base md:text-lg tracking-[0.15em] mb-3">LUMINA MODULAR SIDE TABLE</h4>
+                    <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$950</p>
+                    <button onclick="addToBag('Lumina Modular Side Table', '$950')" class="border-b border-luxuryDark text-luxuryDark pb-1 text-xs tracking-[0.2em] uppercase font-medium hover:text-neutral-500 hover:border-neutral-500 transition-colors">
+                        Discover
+                    </button>
+                </div>
             </div>
 
-        </div>
-    </section>
-
-    <!-- Botanical Elements Section -->
-    <section class="py-16 px-6 bg-[#f4f4f4]">
-        <div class="max-w-6xl mx-auto bg-white p-8 lg:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center shadow-sm">
-            
-            <!-- Planter Image Container -->
-            <div class="bg-[#fafafa] p-6 flex items-center justify-center">
-                <img src="lumina-botanical-planter.jfif" alt="Lumina Botanical Planter" class="w-full h-auto max-h-[360px] object-contain drop-shadow-lg" onerror="this.src='https://placehold.co/600x600/f4f4f4/333333?text=Botanical+Planter'">
-            </div>
-
-            <!-- Content -->
-            <div class="space-y-6 text-center lg:text-left">
-                <h3 class="text-2xl lg:text-3xl font-serif tracking-widest text-luxuryDark">BOTANICAL ELEMENTS</h3>
-                <p class="text-neutral-600 font-light text-sm lg:text-base leading-relaxed">
-                    Designed to bridge organic life with sculptural brutalism. Each glass module creates a micro-habitat for succulents and cascading botanicals, topped with solid American walnut trim.
-                </p>
-                <div class="pt-2">
-                    <button onclick="addToBag('Lumina Botanical Planter', '$1,250')" class="inline-block border border-luxuryDark text-luxuryDark px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
-                        SHOP ACCESSORIES
+            <!-- Product 3: Lumina Desk (Right Column) -->
+            <div class="col-span-1 group flex flex-col items-center">
+                <div class="w-full bg-stoneBg p-10 md:p-16 flex items-center justify-center mb-8 overflow-hidden h-[400px] md:h-[500px] image-container">
+                    <img src="lumina-desk.jfif" 
+                         alt="Lumina Desk" 
+                         class="w-full h-full object-contain drop-shadow-xl group-hover:scale-[1.03] transition-custom duration-700"
+                         onerror="this.src='https://placehold.co/600x600/e7e5e4/333333?text=Lumina+Desk'">
+                </div>
+                <div class="text-center flex flex-col items-center">
+                    <h4 class="font-serif text-base md:text-lg tracking-[0.15em] mb-3">LUMINA DESK</h4>
+                    <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$1,850</p>
+                    <button onclick="addToBag('Lumina Desk', '$1,850')" class="border-b border-luxuryDark text-luxuryDark pb-1 text-xs tracking-[0.2em] uppercase font-medium hover:text-neutral-500 hover:border-neutral-500 transition-colors">
+                        Discover
                     </button>
                 </div>
             </div>
@@ -199,76 +196,103 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="about" class="bg-luxuryDark text-white py-16 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12 border-b border-neutral-800 pb-12">
+    <!-- Botanical Elements Section -->
+    <section class="py-20 md:py-32 px-4 sm:px-8 bg-white border-t border-luxuryBorder">
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
             
-            <!-- Brand Column -->
-            <div class="space-y-4">
-                <h4 class="text-lg font-serif tracking-[0.25em]">AURA ATELIER</h4>
-                <p class="text-xs text-neutral-400 font-light leading-relaxed">
+            <!-- Left: Image -->
+            <div class="bg-stoneBg p-10 md:p-20 flex items-center justify-center image-container">
+                <img src="lumina-botanical-element.jfif" 
+                     alt="Lumina Botanical Planter" 
+                     class="w-full h-auto max-h-[600px] object-contain drop-shadow-2xl"
+                     onerror="this.src='https://placehold.co/800x800/e7e5e4/333333?text=Botanical+Planter'">
+            </div>
+
+            <!-- Right: Text Content -->
+            <div class="text-center md:text-left flex flex-col items-center md:items-start justify-center md:pr-12">
+                <h3 class="text-3xl md:text-4xl font-serif tracking-[0.15em] text-luxuryDark mb-6 leading-tight">
+                    BOTANICAL ELEMENTS
+                </h3>
+                <p class="text-neutral-500 font-light text-sm md:text-base leading-relaxed mb-10 max-w-md mx-auto md:mx-0">
+                    Designed to bridge organic life with sculptural brutalism. Each glass module creates a micro-habitat for succulents and cascading botanicals, seamlessly integrated with solid American walnut trim.
+                </p>
+                <button onclick="addToBag('Botanical Planter', '$1,250')" class="inline-block border border-luxuryDark text-luxuryDark px-10 py-4 text-[11px] tracking-[0.25em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-custom">
+                    Shop Accessories
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="about" class="bg-luxuryDark text-white pt-24 pb-12 px-8">
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 mb-16 border-b border-neutral-800 pb-16">
+            
+            <!-- Brand Info (Col span 4) -->
+            <div class="md:col-span-4 space-y-6">
+                <h4 class="text-xl font-serif tracking-[0.25em]">AURA ATELIER</h4>
+                <p class="text-xs text-neutral-400 font-light leading-relaxed max-w-xs">
                     Crafting sculptural furniture and minimalist design objects where transparency meets raw materiality.
                 </p>
             </div>
 
-            <!-- Navigation Links -->
-            <div>
-                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">EXPLORE</h5>
-                <ul class="space-y-2.5 text-xs text-neutral-400 font-light">
+            <!-- Navigation Links (Col span 2) -->
+            <div class="md:col-span-2">
+                <h5 class="text-[10px] tracking-[0.2em] font-medium uppercase mb-6 text-neutral-300">Explore</h5>
+                <ul class="space-y-4 text-xs text-neutral-400 font-light">
                     <li><a href="#collections" class="hover:text-white transition-colors">Lumina Collection</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Modular Systems</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Botanical Series</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Custom Commissions</a></li>
                 </ul>
             </div>
 
-            <!-- Client Care -->
-            <div>
-                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">CLIENT CARE</h5>
-                <ul class="space-y-2.5 text-xs text-neutral-400 font-light">
+            <!-- Client Care (Col span 2) -->
+            <div class="md:col-span-2">
+                <h5 class="text-[10px] tracking-[0.2em] font-medium uppercase mb-6 text-neutral-300">Client Care</h5>
+                <ul class="space-y-4 text-xs text-neutral-400 font-light">
                     <li><a href="#" class="hover:text-white transition-colors">Concierge Service</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Shipping & White Glove</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
                     <li><a href="#" class="hover:text-white transition-colors">Care Instructions</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Inquiries</a></li>
                 </ul>
             </div>
 
-            <!-- Newsletter -->
-            <div id="journal">
-                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">JOURNAL</h5>
-                <p class="text-xs text-neutral-400 font-light mb-4">Subscribe to receive private viewings and editorial dispatches.</p>
-                <form onsubmit="handleSubscribe(event)" class="flex">
-                    <input type="email" placeholder="Enter your email" required class="bg-neutral-900 border border-neutral-700 text-xs px-3 py-2 text-white focus:outline-none focus:border-white w-full">
-                    <button type="submit" class="bg-white text-luxuryDark px-4 text-xs tracking-widest uppercase font-medium hover:bg-neutral-200 transition-colors">JOIN</button>
+            <!-- Newsletter (Col span 4) -->
+            <div id="journal" class="md:col-span-4">
+                <h5 class="text-[10px] tracking-[0.2em] font-medium uppercase mb-6 text-neutral-300">The Journal</h5>
+                <p class="text-xs text-neutral-400 font-light mb-6">Subscribe to receive private viewings and editorial dispatches.</p>
+                <form onsubmit="handleSubscribe(event)" class="flex border-b border-neutral-600 focus-within:border-white transition-colors">
+                    <input type="email" placeholder="Email Address" required class="bg-transparent border-none text-xs px-2 py-3 text-white focus:outline-none focus:ring-0 w-full placeholder-neutral-600 font-light">
+                    <button type="submit" class="text-white px-4 text-[10px] tracking-widest uppercase font-medium hover:text-neutral-400 transition-colors">Join</button>
                 </form>
             </div>
 
         </div>
 
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500 font-light">
+        <!-- Copyright -->
+        <div class="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-600 font-light uppercase tracking-widest">
             <p>&copy; 2026 AURA ATELIER. All rights reserved.</p>
-            <div class="flex space-x-6 mt-4 sm:mt-0">
-                <a href="#" class="hover:text-neutral-400 transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-neutral-400 transition-colors">Terms of Service</a>
+            <div class="flex space-x-8 mt-6 sm:mt-0">
+                <a href="#" class="hover:text-neutral-400 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-neutral-400 transition-colors">Terms</a>
             </div>
         </div>
     </footer>
 
-    <!-- Interactive Drawer / Modal Overlay -->
-    <div id="interactive-modal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white max-w-md w-full p-8 relative shadow-2xl rounded-sm">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-luxuryDark text-lg">
+    <!-- Interactive Modal -->
+    <div id="interactive-modal" class="fixed inset-0 bg-black/80 z-[100] hidden backdrop-blur-sm flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+        <div class="bg-luxuryLight max-w-lg w-full p-10 relative shadow-2xl transform scale-95 transition-transform duration-300" id="modal-box">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-neutral-400 hover:text-luxuryDark text-xl transition-colors">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div id="modal-content" class="text-center space-y-4 pt-2">
-                <!-- Dynamic Content inserted via JS -->
+            <div id="modal-content" class="text-center space-y-6 pt-4">
+                <!-- Content injected via JS -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Interactions -->
+    <!-- Scripts -->
     <script>
-        // Mobile Menu Toggle
+        // Mobile Menu Logic
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
 
@@ -276,51 +300,69 @@
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Modal Functionality
+        // Modal Logic
         const modal = document.getElementById('interactive-modal');
+        const modalBox = document.getElementById('modal-box');
         const modalContent = document.getElementById('modal-content');
 
-        function openModal(title, detail = "") {
-            modalContent.innerHTML = `
-                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
-                    <i class="fa-solid fa-gem text-lg"></i>
-                </div>
-                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">${title}</h3>
-                <p class="text-xs text-neutral-600 font-light leading-relaxed">${detail || 'Experience uncompromising craftsmanship with our digital concierge service. Sign in to manage your private collections and custom requests.'}</p>
-                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CLOSE</button>
-            `;
+        function showModal() {
             modal.classList.remove('hidden');
+            // Small delay to trigger CSS transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalBox.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function openModal(title) {
+            modalContent.innerHTML = `
+                <h3 class="font-serif text-2xl tracking-[0.15em] text-luxuryDark">${title}</h3>
+                <p class="text-sm text-neutral-500 font-light leading-relaxed">Experience uncompromising craftsmanship. Sign in to manage your private collections and custom requests.</p>
+                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-4 text-xs tracking-[0.2em] uppercase mt-6 hover:bg-neutral-800 transition-colors">Close</button>
+            `;
+            showModal();
         }
 
         function addToBag(itemTitle, price) {
             modalContent.innerHTML = `
-                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
-                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <div class="w-16 h-16 border border-luxuryDark rounded-full flex items-center justify-center mx-auto mb-6 text-luxuryDark">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
                 </div>
-                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">ADDED TO BAG</h3>
-                <p class="text-xs text-neutral-600 font-light leading-relaxed">${itemTitle} (${price}) has been added to your shopping bag.</p>
-                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CONTINUE BROWSING</button>
+                <h3 class="font-serif text-xl tracking-[0.15em] text-luxuryDark mb-2">ADDED TO BAG</h3>
+                <p class="text-sm text-neutral-600 font-light leading-relaxed">
+                    <strong class="font-medium text-luxuryDark">${itemTitle}</strong><br>
+                    ${price}
+                </p>
+                <div class="mt-8 space-y-3">
+                    <button class="w-full bg-luxuryDark text-white py-4 text-xs tracking-[0.2em] uppercase hover:bg-neutral-800 transition-colors">Checkout</button>
+                    <button onclick="closeModal()" class="w-full bg-transparent border border-luxuryDark text-luxuryDark py-4 text-xs tracking-[0.2em] uppercase hover:bg-luxuryDark hover:text-white transition-colors">Continue Browsing</button>
+                </div>
             `;
-            modal.classList.remove('hidden');
+            showModal();
         }
 
         function handleSubscribe(e) {
             e.preventDefault();
             modalContent.innerHTML = `
-                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
-                    <i class="fa-solid fa-check text-lg"></i>
+                <div class="w-16 h-16 border border-luxuryDark rounded-full flex items-center justify-center mx-auto mb-6 text-luxuryDark">
+                    <i class="fa-solid fa-envelope-open-text text-xl"></i>
                 </div>
-                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">WELCOME TO THE JOURNAL</h3>
-                <p class="text-xs text-neutral-600 font-light leading-relaxed">Thank you for subscribing. You have been added to our private atelier dispatches.</p>
-                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CLOSE</button>
+                <h3 class="font-serif text-xl tracking-[0.15em] text-luxuryDark">WELCOME TO THE JOURNAL</h3>
+                <p class="text-sm text-neutral-500 font-light leading-relaxed mt-4">Thank you for subscribing. You have been added to our private atelier dispatches.</p>
+                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-4 text-xs tracking-[0.2em] uppercase mt-8 hover:bg-neutral-800 transition-colors">Close</button>
             `;
-            modal.classList.remove('hidden');
+            showModal();
         }
 
-        function closeModal() {
-            modal.classList.add('hidden');
-        }
-
+        // Close modal on background click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
