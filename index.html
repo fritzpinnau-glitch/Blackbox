@@ -1,427 +1,316 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLOCKBOX — Der physische Ad-Blocker für dein Netzwerk</title>
-<meta name="description" content="BlockBox ist der physische Ad-Blocker für dein Netzwerk. Einstecken, verbinden, Werbung reduzieren – ohne monatliches Abo.">
-<style>
-:root{
-  --bg:#f5f5f3;--surface:#fff;--text:#101010;--muted:#6d6d6d;--line:#deded9;
-  --black:#080808;--green:#b8ff4d;--max:1180px;--radius:28px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-button{font:inherit;border:0;cursor:pointer}
-.container{width:min(var(--max),calc(100% - 40px));margin:auto}
-
-/* Dynamischer, transparenter "True Glass" Header mit automatischem Farbwechsel */
-nav{
-  height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:fixed;
-  top:16px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(var(--max), calc(100% - 40px));
-  background:rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(14px) saturate(250%);
-  -webkit-backdrop-filter: blur(14px) saturate(250%);
-  z-index:999;
-  border-radius:999px;
-  padding:0 24px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
-}
-
-/* Wenn der Header über eine dunkle Sektion scrollt, schaltet er automatisch auf hellen Text um */
-nav.dark-mode {
-  background: rgba(18, 18, 18, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-nav.dark-mode .nav-links a { color: #ccc; }
-nav.dark-mode .nav-links a:hover { color: #fff; }
-nav.dark-mode .nav-cta { background: #fff; color: #000; }
-
-.logo{font-weight:900;letter-spacing:-.07em;font-size:22px}
-.nav-links{display:flex;gap:28px;color:#333;font-size:14px;transition: color 0.3s ease}
-.nav-links a:hover{color:#000}
-.nav-cta{background:#000;color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease}
-.nav-cta:hover{transform: scale(1.03)}
-
-/* Moderne Scroll-Animations-Klassen (Reveal on Scroll) */
-.reveal{
-  opacity:0;
-  transform:translateY(50px);
-  transition:opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change:opacity, transform;
-}
-.reveal.active{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.hero{padding:180px 0 90px;min-height:800px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.13em;margin-bottom:22px}
-h1{font-size:clamp(48px,6vw,84px);line-height:.93;letter-spacing:-.075em;max-width:700px}
-.hero p{font-size:19px;color:var(--muted);max-width:540px;margin:28px 0}
-.actions{display:flex;gap:12px;flex-wrap:wrap}
-.btn{padding:16px 23px;border-radius:999px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;justify-content:center}
-.btn-primary{background:#000;color:#fff}
-.btn-primary:hover{transform:translateY(-2px)}
-.btn-secondary{border:1px solid #bbb;background:transparent}
-
-.product-stage{
-  height:480px;
-  border-radius:36px;
-  background-image: url('131f1fec-067f-4b2b-8cd4-8caf7da46ac8.png');
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-  position:relative;
-  overflow:hidden;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.product-stage:hover{transform: scale(1.02)}
-
-.section{padding:120px 0}
-.section-dark{background:#080808;color:#fff}
-.section-head{max-width:700px;margin-bottom:55px}
-.kicker{font-size:13px;text-transform:uppercase;letter-spacing:.14em;font-weight:800;color:#777;margin-bottom:15px}
-.section-dark .kicker{color:#aaa}
-h2{font-size:clamp(36px,4.5vw,60px);line-height:.98;letter-spacing:-.06em}
-.lead{font-size:19px;color:var(--muted);margin-top:20px;max-width:680px}
-.section-dark .lead{color:#aaa}
-
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px;min-height:245px;transition:transform 0.4s ease, border-color 0.4s ease}
-.card:hover{transform:translateY(-8px);border-color:#000}
-.section-dark .card{background:#121212;border-color:#292929}
-.section-dark .card:hover{border-color:#fff}
-.icon{font-size:32px;margin-bottom:40px}
-.card h3{font-size:24px;letter-spacing:-.035em;margin-bottom:10px}
-.card p{color:var(--muted)}
-.section-dark .card p{color:#999}
-
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.compare-card{border-radius:var(--radius);padding:38px;min-height:380px;display:flex;flex-direction:column;justify-content:space-between}
-.before{background:#e8e8e3}.after{background:#0b0b0b;color:#fff}
-.browser{height:180px;border-radius:17px;background:#fff;padding:17px;color:#111;box-shadow:0 10px 30px #0001;overflow:hidden}
-.browser-bar{height:9px;width:90px;background:#ddd;border-radius:10px;margin-bottom:20px}
-.ads{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ad{height:55px;border-radius:8px;background:#ddd;position:relative}
-.ad:after{content:"ADVERTISEMENT";font-size:7px;color:#888;position:absolute;left:8px;top:7px}
-.clean{height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:25px}
-
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.step{border-top:1px solid #333;padding-top:20px}
-.num{font-size:12px;color:#777;margin-bottom:40px}
-.step h3{font-size:28px;letter-spacing:-.04em;margin-bottom:10px}
-.step p{color:#999}
-
-.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.product-large{
-  height:440px;
-  border-radius:34px;
-  background-image: url('Gemini_Generated_Image_ghyu75ghyu75ghyu.jfif');
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 30px 70px #0003;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.product-large:hover{transform: scale(1.02)}
-.specs{list-style:none;margin-top:28px;border-top:1px solid var(--line)}
-.specs li{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line);gap:20px}
-.specs span:last-child{font-weight:700;text-align:right}
-
-.gallery-section{padding:100px 0;background:#121212;color:#fff}
-.gallery-img{
-  height:480px;
-  border-radius:30px;
-  background-image: url('NoteGPT_Image_20260823190945.png');
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  margin-top:40px;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.gallery-img:hover{transform: scale(1.015)}
-
-.waitlist-box{background:#dfffad;border-radius:32px;padding:50px;color:#111}
-.waitlist-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
-.waitlist-box h2{font-size:44px;letter-spacing:-.05em;margin-bottom:10px}
-.waitlist-box p{color:#3a4a28;margin-bottom:20px}
-.form-group{display:flex;gap:10px;flex-wrap:wrap}
-.form-input{flex:1;min-width:220px;padding:16px 20px;border-radius:999px;border:1px solid #b2db85;background:#fff;font-size:15px;outline:none}
-.form-input:focus{border-color:#000}
-.privacy-hint{font-size:12px;color:#4e603b;margin-top:10px}
-
-.faq{max-width:800px}
-.faq-item{border-top:1px solid var(--line);padding:22px 0}
-.faq-q{display:flex;justify-content:space-between;font-weight:800;cursor:pointer}
-.faq-a{display:none;color:var(--muted);padding:14px 30px 0 0}
-.faq-item.open .faq-a{display:block}
-
-footer{background:#080808;color:#fff;padding:60px 0 40px}
-.footer-row{display:flex;justify-content:space-between;gap:30px;align-items:flex-start;margin-bottom:40px;border-bottom:1px solid #222;padding-bottom:40px}
-.footer-links{display:flex;gap:20px;font-size:13px;color:#888}
-.footer-links a:hover{color:#fff}
-footer p{color:#888;font-size:13px}
-
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;align-items:center;justify-content:center;padding:20px}
-.modal.active{display:flex}
-.modal-content{background:#fff;color:#111;padding:40px;border-radius:24px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
-.modal-close{position:absolute;top:20px;right:20px;font-size:20px;cursor:pointer;background:none;border:0;font-weight:bold}
-.modal-content h3{margin-bottom:15px;font-size:22px}
-.modal-content p, .modal-content address{font-style:normal;font-size:14px;color:#555;line-height:1.6;margin-bottom:15px}
-
-@media(max-width:850px){
-  .nav-links{display:none}
-  nav{top:10px; width:calc(100% - 20px)}
-  .hero{grid-template-columns:1fr;padding-top:140px}.product-stage{height:320px}
-  .features,.steps,.compare,.spec-grid,.waitlist-grid{grid-template-columns:1fr}
-  .section{padding:75px 0}.waitlist-box{padding:30px}
-  .waitlist-box h2{font-size:32px}.footer-row{flex-direction:column}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Atelier | Sculptural Furniture & Objects</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for High-End Serif & Clean Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                    },
+                    colors: {
+                        luxuryDark: '#1a1a1a',
+                        luxuryGray: '#f4f4f4',
+                        luxuryBorder: '#e5e5e5',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Jost', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.12em;
+        }
+        /* Smooth transitions for interactive elements */
+        .transition-all-custom {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
 </head>
-<body>
+<body class="antialiased selection:bg-luxuryDark selection:text-white">
 
-<header>
-  <nav id="navbar">
-    <a class="logo" href="#">BLOCKBOX</a>
-    <div class="nav-links">
-      <a href="#how">So funktioniert's</a>
-      <a href="#features">Features</a>
-      <a href="#gallery">Galerie</a>
-      <a href="#faq">FAQ</a>
+    <!-- Top Announcement Bar -->
+    <div class="bg-[#111] text-white text-[11px] tracking-[0.2em] py-2 text-center font-sans font-light">
+        COMPLIMENTARY GLOBAL SHIPPING ON ORDERS OVER $2,000
     </div>
-    <a class="nav-cta" href="#buy">Vorbestellen</a>
-  </nav>
-</header>
 
-<main>
-<section class="container hero">
-  <div class="reveal">
-    <div class="eyebrow">The physical ad blocker</div>
-    <h1>Und? Warum siehst du noch Werbung?</h1>
-    <p>BlockBox sitzt unauffällig an deinem Router und filtert Werbung sowie Tracker auf Netzwerkebene – vollautomatisch für alle Geräte im Haus.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="#buy">20% Rabatt sichern →</a>
-      <a class="btn btn-secondary" href="#how">So funktioniert's</a>
+    <!-- Main Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-luxuryBorder">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <!-- Mobile Menu & Left Nav -->
+            <div class="flex items-center space-x-6 lg:w-1/3">
+                <button id="mobile-menu-btn" class="lg:hidden text-luxuryDark text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <nav class="hidden lg:flex items-center space-x-8 text-xs tracking-[0.15em] font-medium text-luxuryDark">
+                    <a href="#collections" class="hover:opacity-60 transition-opacity">COLLECTIONS</a>
+                    <a href="#about" class="hover:opacity-60 transition-opacity">ABOUT</a>
+                    <a href="#journal" class="hover:opacity-60 transition-opacity">JOURNAL</a>
+                </nav>
+            </div>
+
+            <!-- Centered Brand Logo -->
+            <div class="text-center lg:w-1/3">
+                <a href="#" class="inline-block">
+                    <h1 class="text-xl lg:text-2xl font-serif font-semibold tracking-[0.25em] text-luxuryDark">AURA</h1>
+                    <span class="text-[9px] tracking-[0.4em] text-neutral-500 font-sans block -mt-1">ATELIER</span>
+                </a>
+            </div>
+
+            <!-- Right Icons -->
+            <div class="flex items-center justify-end space-x-6 lg:w-1/3 text-sm text-luxuryDark">
+                <button aria-label="Search" class="hover:opacity-60 transition-opacity hidden sm:block">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button aria-label="Account" class="hover:opacity-60 transition-opacity hidden sm:block" onclick="openModal('Account Portal')">
+                    <i class="fa-regular fa-user"></i>
+                </button>
+                <button aria-label="Cart" class="hover:opacity-60 transition-opacity relative" onclick="openModal('Shopping Bag (0 items)')">
+                    <i class="fa-solid fa-bag-shopping text-base"></i>
+                    <span class="absolute -top-1 -right-2 bg-luxuryDark text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-sans">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-luxuryBorder px-6 py-6 space-y-4 shadow-xl">
+            <a href="#collections" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">COLLECTIONS</a>
+            <a href="#about" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">ABOUT</a>
+            <a href="#journal" class="block text-sm tracking-widest font-medium py-2 border-b border-gray-100">JOURNAL</a>
+            <div class="flex space-x-6 pt-4 text-sm text-luxuryDark">
+                <button class="flex items-center space-x-2" onclick="openModal('Search')"><i class="fa-solid fa-magnifying-glass"></i> <span>Search</span></button>
+                <button class="flex items-center space-x-2" onclick="openModal('Account Portal')"><i class="fa-regular fa-user"></i> <span>Account</span></button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-[#f4f4f4] py-16 lg:py-24 px-6 overflow-hidden">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="space-y-4 mb-12">
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-serif text-luxuryDark tracking-wider">
+                    LUMINA COLLECTION: SCULPTURAL HARMONY
+                </h2>
+                <div class="pt-2">
+                    <a href="#lumina-details" class="inline-block border border-luxuryDark text-luxuryDark px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom shadow-sm">
+                        SHOP THE CONSOLE
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Image Container (Matching image_4.png Console) -->
+            <div class="relative max-w-5xl mx-auto bg-white/40 p-6 sm:p-12 rounded-sm shadow-sm flex items-center justify-center">
+                <img src="image_4.png" alt="Lumina Long Console Table with Walnut Top and Smoke Glass Bases" class="w-full h-auto object-contain max-h-[500px] drop-shadow-xl" onerror="this.src='https://placehold.co/1000x500/f4f4f4/333333?text=Lumina+Console+Table'">
+            </div>
+        </div>
+    </section>
+
+    <section id="collections" class="py-20 lg:py-28 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h3 class="text-2xl lg:text-3xl font-serif tracking-widest text-luxuryDark mb-3">FEATURED DESIGNS</h3>
+            <div class="w-12 h-[1px] bg-luxuryDark mx-auto opacity-40"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-start">
+            
+            <!-- Product 1: Lumina Long Console -->
+            <div class="group text-center flex flex-col items-center">
+                <div class="bg-[#f9f9f9] w-full p-8 lg:p-12 flex items-center justify-center mb-6 rounded-sm min-h-[380px] transition-all-custom group-hover:bg-[#f2f2f2]">
+                    <img src="image_4.png" alt="Lumina Console" class="w-full h-auto max-h-[280px] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/800x500/f4f4f4/333333?text=Lumina+Console'">
+                </div>
+                <h4 class="font-serif text-sm lg:text-base tracking-widest mb-2">LUMINA LONG CONSOLE TABLE</h4>
+                <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$2,900</p>
+                <button onclick="addToBag('Lumina Long Console Table', '$2,900')" class="border border-luxuryDark text-luxuryDark px-7 py-3 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
+                    DISCOVER
+                </button>
+            </div>
+
+            <!-- Product 2: Lumina Side Table -->
+            <div class="group text-center flex flex-col items-center">
+                <div class="bg-[#f9f9f9] w-full p-8 lg:p-12 flex items-center justify-center mb-6 rounded-sm min-h-[380px] transition-all-custom group-hover:bg-[#f2f2f2]">
+                    <img src="image_3.png" alt="Lumina Side Table" class="w-full h-auto max-h-[280px] object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x500/f4f4f4/333333?text=Lumina+Side+Table'">
+                </div>
+                <h4 class="font-serif text-sm lg:text-base tracking-widest mb-2">LUMINA MODULAR SIDE TABLE</h4>
+                <p class="font-sans text-sm tracking-wider text-neutral-600 mb-6">$950</p>
+                <button onclick="addToBag('Lumina Modular Side Table', '$950')" class="border border-luxuryDark text-luxuryDark px-7 py-3 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
+                    DISCOVER
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-16 px-6 bg-[#f4f4f4]">
+        <div class="max-w-6xl mx-auto bg-white p-8 lg:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center shadow-sm">
+            
+            <!-- Planter Image Container (image.png) -->
+            <div class="bg-[#fafafa] p-6 flex items-center justify-center">
+                <img src="image.png" alt="Lumina Botanical Planter" class="w-full h-auto max-h-[360px] object-contain drop-shadow-lg" onerror="this.src='https://placehold.co/600x600/f4f4f4/333333?text=Botanical+Planter'">
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-6 text-center lg:text-left">
+                <h3 class="text-2xl lg:text-3xl font-serif tracking-widest text-luxuryDark">BOTANICAL ELEMENTS</h3>
+                <p class="text-neutral-600 font-light text-sm lg:text-base leading-relaxed">
+                    Designed to bridge organic life with sculptural brutalism. Each glass module creates a micro-habitat for succulents and cascading botanicals, topped with solid American walnut trim.
+                </p>
+                <div class="pt-2">
+                    <button onclick="addToBag('Lumina Botanical Planter', '$1,250')" class="inline-block border border-luxuryDark text-luxuryDark px-8 py-3.5 text-xs tracking-[0.2em] uppercase font-medium hover:bg-luxuryDark hover:text-white transition-all-custom">
+                        SHOP ACCESSORIES
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-luxuryDark text-white py-16 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12 border-b border-neutral-800 pb-12">
+            
+            <!-- Brand Column -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-serif tracking-[0.25em]">AURA ATELIER</h4>
+                <p class="text-xs text-neutral-400 font-light leading-relaxed">
+                    Crafting sculptural furniture and minimalist design objects where transparency meets raw materiality.
+                </p>
+            </div>
+
+            <!-- Navigation Links -->
+            <div>
+                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">EXPLORE</h5>
+                <ul class="space-y-2.5 text-xs text-neutral-400 font-light">
+                    <li><a href="#collections" class="hover:text-white transition-colors">Lumina Collection</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Modular Systems</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Botanical Series</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Custom Commissions</a></li>
+                </ul>
+            </div>
+
+            <!-- Client Care -->
+            <div>
+                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">CLIENT CARE</h5>
+                <ul class="space-y-2.5 text-xs text-neutral-400 font-light">
+                    <li><a href="#" class="hover:text-white transition-colors">Concierge Service</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Shipping & White Glove</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Care Instructions</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Inquiries</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div>
+                <h5 class="text-xs tracking-[0.2em] font-medium uppercase mb-4 text-neutral-300">JOURNAL</h5>
+                <p class="text-xs text-neutral-400 font-light mb-4">Subscribe to receive private viewings and editorial dispatches.</p>
+                <form onsubmit="handleSubscribe(event)" class="flex">
+                    <input type="email" placeholder="Enter your email" required class="bg-neutral-900 border border-neutral-700 text-xs px-3 py-2 text-white focus:outline-none focus:border-white w-full">
+                    <button type="submit" class="bg-white text-luxuryDark px-4 text-xs tracking-widest uppercase font-medium hover:bg-neutral-200 transition-colors">JOIN</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500 font-light">
+            <p>&copy; 2026 AURA ATELIER. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 sm:mt-0">
+                <a href="#" class="hover:text-neutral-400 transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-neutral-400 transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Drawer / Modal Overlay -->
+    <div id="interactive-modal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full p-8 relative shadow-2xl rounded-sm">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-luxuryDark text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content" class="text-center space-y-4 pt-2">
+                <!-- Dynamic Content inserted via JS -->
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="product-stage reveal" aria-label="BlockBox Produktbild neben Router" style="transition-delay: 0.2s;"></div>
-</section>
 
-<section class="section section-dark" id="features">
-<div class="container">
-  <div class="section-head reveal">
-    <div class="kicker">One box. Your network.</div>
-    <h2>Einstecken. Verbinden. Weniger Werbung.</h2>
-    <p class="lead">Keine umständlichen Apps, die du auf jedem Smartphone oder Fernseher einzeln installieren musst. BlockBox schützt das gesamte WLAN zentral.</p>
-  </div>
-  <div class="features">
-    <article class="card reveal"><div class="icon">↯</div><h3>Plug in</h3><p>Einfach per Kabel mit deinem vorhandenen Router verbinden und sofort einsatzbereit.</p></article>
-    <article class="card reveal" style="transition-delay: 0.15s;"><div class="icon">⊘</div><h3>No more ads</h3><p>Werbung und bekannte Tracker werden direkt im Netzwerk herausgefiltert, bevor sie laden.</p></article>
-    <article class="card reveal" style="transition-delay: 0.3s;"><div class="icon">∞</div><h3>No subscription</h3><p>Einmal kaufen statt monatlich für teure Software-Abos zu bezahlen.</p></article>
-  </div>
-</div>
-</section>
+    <!-- JavaScript Interactions -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-<section class="section">
-<div class="container">
-  <div class="section-head reveal">
-    <div class="kicker">See the difference</div>
-    <h2>Vorher. Nachher.</h2>
-  </div>
-  <div class="compare">
-    <div class="compare-card before reveal">
-      <div><div class="kicker">Without BlockBox</div><h3>Mehr Werbung. Mehr Ablenkung.</h3></div>
-      <div class="browser"><div class="browser-bar"></div><div class="ads"><div class="ad"></div><div class="ad"></div><div class="ad"></div><div class="ad"></div></div></div>
-    </div>
-    <div class="compare-card after reveal" style="transition-delay: 0.2s;">
-      <div><div class="kicker">With BlockBox</div><h3>Clean. Einfacher. Ruhiger.</h3></div>
-      <div class="browser"><div class="browser-bar"></div><div class="clean">CONTENT</div></div>
-    </div>
-  </div>
-</div>
-</section>
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-<section class="section section-dark" id="how">
-<div class="container">
-  <div class="section-head reveal">
-    <div class="kicker">How it works</div>
-    <h2>Ein kleines Gerät. Für dein ganzes Netzwerk.</h2>
-  </div>
-  <div class="steps">
-    <div class="step reveal"><div class="num">01</div><h3>Plug in.</h3><p>Verbinde BlockBox mit einem freien LAN-Port deines Routers.</p></div>
-    <div class="step reveal" style="transition-delay: 0.15s;"><div class="num">02</div><h3>Block.</h3><p>Das System filtert im Hintergrund vollautomatisch bekanntermaßen unerwünschte Werbe- und Tracking-Domains.</p></div>
-    <div class="step reveal" style="transition-delay: 0.3s;"><div class="num">03</div><h3>Enjoy.</h3><p>Laptop, Smartphone, Smart-TV und Tablet profitieren direkt von weniger Ablenkung.</p></div>
-  </div>
-</div>
-</section>
+        // Modal Functionality (Replaces alert/confirm)
+        const modal = document.getElementById('interactive-modal');
+        const modalContent = document.getElementById('modal-content');
 
-<section class="section">
-<div class="container spec-grid">
-  <div class="product-large reveal"></div>
-  <div class="reveal" style="transition-delay: 0.2s;">
-    <div class="kicker">Meet BlockBox</div>
-    <h2>Designed to disappear.</h2>
-    <p class="lead">Schlicht, elegant matt-schwarz und kompakt gebaut, um unauffällig direkt neben deinem Router zu stehen.</p>
-    <ul class="specs">
-      <li><span>Design</span><span>Minimal · Mattschwarz</span></li>
-      <li><span>Setup</span><span>True Plug & Play</span></li>
-      <li><span>Abdeckung</span><span>Netzwerkweit (Multi-Device)</span></li>
-      <li><span>Modell</span><span>Einmaliger Kauf</span></li>
-    </ul>
-  </div>
-</div>
-</section>
+        function openModal(title, detail = "") {
+            modalContent.innerHTML = `
+                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
+                    <i class="fa-solid fa-gem text-lg"></i>
+                </div>
+                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">${title}</h3>
+                <p class="text-xs text-neutral-600 font-light leading-relaxed">${detail || 'Experience uncompromising craftsmanship with our digital concierge service. Sign in to manage your private collections and custom requests.'}</p>
+                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CLOSE</button>
+            `;
+            modal.classList.remove('hidden');
+        }
 
-<section class="gallery-section" id="gallery">
-<div class="container">
-  <div class="section-head reveal" style="margin-bottom:0;">
-    <div class="kicker" style="color:#aaa;">Living Room Integration</div>
-    <h2>Fügt sich nahtlos in dein Zuhause ein.</h2>
-    <p class="lead" style="color:#999;">Kein Kabelsalat, kein störendes Blinken – BlockBox arbeitet leise und zuverlässig im Hintergrund.</p>
-  </div>
-  <div class="gallery-img reveal" style="transition-delay: 0.2s;"></div>
-</div>
-</section>
+        function addToBag(itemTitle, price) {
+            modalContent.innerHTML = `
+                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                </div>
+                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">ADDED TO BAG</h3>
+                <p class="text-xs text-neutral-600 font-light leading-relaxed">${itemTitle} (${price}) has been added to your shopping bag.</p>
+                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CONTINUE BROWSING</button>
+            `;
+            modal.classList.remove('hidden');
+        }
 
-<section class="section" id="buy">
-<div class="container">
-  <div class="waitlist-box reveal">
-    <div class="waitlist-grid">
-      <div>
-        <div class="kicker" style="color:#4e603b">Limited Launch Edition</div>
-        <h2>Sichere dir 20% Rabatt.</h2>
-        <p>Wir bereiten die erste Produktionsserie vor. Trag dich unverbindlich in die Warteliste ein und erhalte zum Start deinen exklusiven Preisnachlass.</p>
-      </div>
-      <div>
-        <!-- Formspree Integration -->
-        <form action="https://formspree.io/f/xjybdaqo" method="POST">
-          <div class="form-group">
-            <input type="email" name="email" class="form-input" placeholder="Deine E-Mail-Adresse" required>
-            <button type="submit" class="btn btn-primary" style="background:#000; color:#fff;">Warteliste beitreten</button>
-          </div>
-          <div class="privacy-hint">Mit deiner Anmeldung trägst du dich für unseren Launch-Verteiler ein. Du kannst dich jederzeit mit einem Klick abmelden.</div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-</section>
+        function handleSubscribe(e) {
+            e.preventDefault();
+            modalContent.innerHTML = `
+                <div class="w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-luxuryDark">
+                    <i class="fa-solid fa-check text-lg"></i>
+                </div>
+                <h3 class="font-serif text-lg tracking-wider text-luxuryDark">WELCOME TO THE JOURNAL</h3>
+                <p class="text-xs text-neutral-600 font-light leading-relaxed">Thank you for subscribing. You have been added to our private atelier dispatches.</p>
+                <button onclick="closeModal()" class="w-full bg-luxuryDark text-white py-3 text-xs tracking-[0.2em] uppercase mt-4 hover:bg-neutral-800 transition-colors">CLOSE</button>
+            `;
+            modal.classList.remove('hidden');
+        }
 
-<section class="section" id="faq">
-<div class="container">
-  <div class="section-head reveal"><div class="kicker">FAQ</div><h2>Häufige Fragen</h2></div>
-  <div class="faq">
-    <div class="faq-item reveal"><div class="faq-q">Funktioniert BlockBox auf allen Geräten im WLAN? <span>+</span></div><div class="faq-a">Ja, da BlockBox direkt auf Netzwerkebene arbeitet, schützt es alle Geräte (Smart-TVs, Handys, PCs), die mit deinem Router verbunden sind.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Muss ich technische Vorkenntnisse haben? <span>+</span></div><div class="faq-a">Nein. Das Gerät ist so konzipiert, dass kein manuelles Flashen oder Programmieren notwendig ist. Auspacken, anstecken, fertig.</div></div>
-    <div class="faq-item reveal"><div class="faq-q">Gibt es monatliche Folgekosten? <span>+</span></div><div class="faq-a">Nein, es handelt sich um ein reines Hardware-Produkt ohne erzwungene Abo-Gebühren.</div></div>
-  </div>
-</div>
-</section>
-</main>
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
 
-<footer>
-<div class="container">
-  <div class="footer-row">
-    <div>
-      <div class="logo">BLOCKBOX</div>
-      <p style="margin-top:8px">Und? Warum siehst du noch Werbung?</p>
-    </div>
-    <div class="footer-links">
-      <a href="#" onclick="openModal('impressumModal')">Impressum</a>
-      <a href="#" onclick="openModal('datenschutzModal')">Datenschutz</a>
-    </div>
-  </div>
-  <p>© 2026 BLOCKBOX · Alle Rechte vorbehalten.</p>
-</div>
-</footer>
-
-<div class="modal" id="impressumModal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeModal('impressumModal')">×</button>
-    <h3>Impressum</h3>
-    <p><strong>Angaben gemäß § 5 DDG / TMG:</strong></p>
-    <address>
-      Max Mustermann<br>
-      Musterstraße 123<br>
-      12345 Musterstadt<br>
-      Deutschland
-    </address>
-    <p><strong>Kontakt:</strong><br>E-Mail: hello@blockbox.example</p>
-    <p><em>Hinweis: Dies ist eine Prototyp-Landingpage zur Marktvalidierung.</em></p>
-  </div>
-</div>
-
-<div class="modal" id="datenschutzModal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeModal('datenschutzModal')">×</button>
-    <h3>Datenschutzerklärung</h3>
-    <p><strong>1. Datenschutz auf einen Blick</strong><br>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen personenbezogenen Daten passiert, wenn du diese Website besuchst oder dich in unsere Warteliste einträgst.</p>
-    <p><strong>2. Datenerfassung auf dieser Website</strong><br>Die von dir im Wartelisten-Formular eingegebene E-Mail-Adresse wird ausschließlich zum Zweck der Benachrichtigung über den offiziellen Produktlaunch der BlockBox gespeichert und verarbeitet.</p>
-  </div>
-</div>
-
-<script>
-// Scroll-Animation Observer
-const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.reveal').forEach(el => { observer.observe(el); });
-
-// Automatischer Farbwechsel des Glass-Headers je nach Hintergrund (Dunkel/Hell)
-const navbar = document.getElementById('navbar');
-const darkSections = document.querySelectorAll('.section-dark, .gallery-section');
-
-window.addEventListener('scroll', () => {
-  let scrollPos = window.scrollY + 100;
-  let isDark = false;
-
-  darkSections.forEach(sec => {
-    let top = sec.offsetTop;
-    let height = sec.offsetHeight;
-    if (scrollPos >= top && scrollPos < top + height) {
-      isDark = true;
-    }
-  });
-
-  if (isDark) {
-    navbar.classList.add('dark-mode');
-  } else {
-    navbar.classList.remove('dark-mode');
-  }
-});
-
-// FAQ Toggle
-document.querySelectorAll('.faq-q').forEach(q=>{
-  q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
-});
-
-// Modal Funktionen
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-window.onclick = function(event) {
-  if (event.target.classList.contains('modal')) { event.target.classList.remove('active'); }
-}
-</script>
+        // Close modal on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
 </body>
 </html>
